@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  global-postgres:
+    image: postgres
+    ports:
+      - 5430:5432
+    environment:
+      - POSTGRES_USER=oilmartuser
+      - POSTGRES_PASSWORD=oilmartpass
+      - POSTGRES_DB=dboilmart
+  oilmart-express:
+    build: .
+    volumes: 
+      - .:/oilmart-express
+      - node_modules:/oilmart-express/node_modules
+    ports:
+      - 3000:3000
+    stdin_open : true
+    environment :
+      - PORT=3000
+      - DB_USER=oilmartuser
+      - DB_PASSWORD=oilmartpass
+      - DB_HOST=global-postgres
+      - DB_PORT=5432
+      - DB_DATABASE=dboilmart
+    depends_on:
+      - global-postgres
+    command: npm start
+volumes:
+  node_modules:
