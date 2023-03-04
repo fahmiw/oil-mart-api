@@ -2,13 +2,18 @@ require('dotenv').config();
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+// var fileUpload = require('express-fileupload');
 const app = express();
 
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
+// app.use(fileUpload());
 
 // simple route
 app.use((req, res, next) => {
@@ -24,6 +29,7 @@ app.use((req, res, next) => {
     next();
 });
 
+require('./api/inventory/routes')(app);
 require('./api/users/routes')(app);
 require('./api/auth/routes')(app);
 

@@ -11,7 +11,7 @@ module.exports = app => {
 
     const userHandlers = new UsersHandler(usersService, UserValidator);
     const authHandler = new AuthHandler(usersService, TokenManager, AuthValidator);
-
+    
     router.post('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.postUserHandler);
     router.get('/', userHandlers.getUserHandler);
     router.put('/:id', userHandlers.putUserHandler);

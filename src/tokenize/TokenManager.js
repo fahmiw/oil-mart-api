@@ -8,7 +8,6 @@ const TokenManager = {
             const artifact = Jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY);
             return artifact; 
         } catch (error) {
-            console.log(error);
             throw new InvariantError(`You don't have permission to access!`);
         }
     }
