@@ -1,5 +1,6 @@
 const ClientError = require('../../exceptions/ClientError');
 const { pagina } = require('../../utils');
+const bcrypt = require('bcrypt');
 
 class UsersHandler {
     constructor(service, validator) {
@@ -44,6 +45,9 @@ class UsersHandler {
 
     async getUserHandler(req, res) {
         try {
+            if ( req.query.params === undefined) {
+                throw new ClientError("Params undefined")
+            }
             const objParams = JSON.parse(req.query.params);
             let users = await this._service.searchUser(objParams);
             
@@ -76,8 +80,27 @@ class UsersHandler {
         try {
             const { username, password, fullname, role } = req.body;
             const { id } = req.params;
+            let columns = [];
 
-            await this._service.editUser(id, { username, password, fullname, role });
+            if (username !== undefined) {
+                const user = await this._service.searchUser({id: null,search: {username: username},sort:null});
+                if (user.length > 0) {
+                    throw new ClientError('username duplicate');
+                }
+                columns.push(` username = '${username}'`);
+            } 
+            if (password !== undefined) {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                columns.push(` password = '${hashedPassword}'`);
+            }
+            if (fullname !== undefined) {
+                columns.push(` fullname = '${fullname}'`);
+            }
+            if (role !== undefined) {
+                columns.push(` role = '${role}'`);
+            }
+
+            await this._service.editUser(id, columns.toString());
             res.status(200).send({
                 message: `User ${username} Updated`
             });

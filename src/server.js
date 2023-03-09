@@ -3,17 +3,16 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-// var fileUpload = require('express-fileupload');
+const path = require('path');
 const app = express();
 
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
-// app.use(fileUpload());
+app.use('/static', express.static(path.join(__dirname, '../public')));
 
 // simple route
 app.use((req, res, next) => {

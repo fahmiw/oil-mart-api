@@ -99,12 +99,20 @@ class UsersService {
                             };
                         }
                     } else {
-                        /** SEARCH USER with NAME */
-                        query = {
-                            text: 'SELECT u.id, u.fullname, u.username, r.name FROM users u LEFT JOIN roles r ON u.role_id = r.id WHERE u.fullname LIKE $1',
-                            values: ['%' + params.search.name + '%']
-                        };
-                    }
+                        if (params.search.name === undefined) {
+                            /** SEARCH USER with Username */
+                            query = {
+                                text: 'SELECT u.id, u.fullname, u.username, r.name FROM users u LEFT JOIN roles r ON u.role_id = r.id WHERE u.username = $1',
+                                values: [params.search.username]
+                            };
+                        } else {
+                            /** SEARCH USER with NAME */
+                            query = {
+                                text: 'SELECT u.id, u.fullname, u.username, r.name FROM users u LEFT JOIN roles r ON u.role_id = r.id WHERE u.fullname LIKE $1',
+                                values: ['%' + params.search.name + '%']
+                            };
+                        }
+                    } 
                 } else {
                     /** GET USER BY ID */
                     query = {
@@ -124,21 +132,12 @@ class UsersService {
         return result.rows;
     }
 
-    async editUser(id, { username, password, fullname, role}) {
-        let query = [];
+    async editUser(id, columns) {
         const updatedAt = new Date().toISOString();
 
-        if(password === undefined){
-            query = {
-                text: 'UPDATE users SET username = $1, fullname = $2, role_id = $3, updated_at = $4 WHERE id = $5',
-                values: [username, fullname, role, updatedAt, id]
-            }
-        } else {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            query = {
-                text: 'UPDATE users SET username = $1, password = $2, fullname = $3, role_id = $4, updated_at = $5 WHERE id = $6',
-                values: [username, hashedPassword, fullname, role, updatedAt, id]
-            }
+        const query = {
+            text: `UPDATE users SET${columns}, updated_at = $1 WHERE id = $2`,
+            values: [updatedAt, id]
         }
 
         const result = await this._pool.query(query);

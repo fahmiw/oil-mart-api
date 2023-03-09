@@ -20,6 +20,62 @@ class InventoryService {
         return result.rows[0].id;
     }
 
+    async readInventory(params) {
+        let query = [];
+        if(params === undefined) {
+            query = {
+                text: 'SELECT id, name, type, photo FROM inventory'
+            };
+        } else {
+            if(params.search === null){
+                if(params.id === null) {
+                    query = {
+                        text: 'SELECT id, name, type, photo FROM inventory'
+                    };
+                } else {
+                    query = {
+                        text: 'SELECT id, name, type, photo FROM inventory WHERE id = $1',
+                        values: [params.id]
+                    };
+                }
+            } else {
+                query = {
+                    text: 'SELECT id, name, type, photo FROM inventory WHERE name LIKE $1',
+                    values: ['%' + params.search.name + '%']
+                };
+            }
+        }
+        const result = await this._pool.query(query);
+        return result.rows;
+    }
+
+    async editInventory(id, columns) {
+        const updatedAt = new Date().toISOString();
+
+        const query = {
+            text: `UPDATE inventory SET${columns}, updated_at = $1 WHERE id = $2`,
+            values: [updatedAt, id]
+        }
+
+        const result = await this._pool.query(query);
+        if (result.rowCount !== 1) {
+            throw new NotFoundError('Failed updated data, Id Not Found');
+        }
+        return result.rowCount;
+    }
+
+    async removeInventory(id) {
+        const query = {
+            text: 'DELETE FROM inventory WHERE id = $1 RETURNING id',
+            values: [id]
+        }
+        const result = await this._pool.query(query);
+        if (result.rowCount !== 1) {
+            throw new NotFoundError('Failed updated data, Id Not Found');
+        }
+        return result.rowCount;
+    }
+
 }
 
 module.exports = InventoryService;
