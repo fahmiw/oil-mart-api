@@ -71,7 +71,7 @@ class InventoryService {
         }
         const result = await this._pool.query(query);
         if (result.rowCount !== 1) {
-            throw new NotFoundError('Failed updated data, Id Not Found');
+            throw new NotFoundError('Failed delete data, Id Not Found');
         }
         return result.rowCount;
     }

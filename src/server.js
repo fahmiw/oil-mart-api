@@ -31,6 +31,7 @@ app.use((req, res, next) => {
 require('./api/inventory/routes')(app);
 require('./api/users/routes')(app);
 require('./api/auth/routes')(app);
+require('./api/products/routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT;
