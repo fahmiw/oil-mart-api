@@ -45,6 +45,10 @@ class AuthHandler {
     async verifyTokenHandler(req, res, next) {
       try {
         let tokenHeader = req.headers.authorization;
+
+        if(tokenHeader === undefined){
+          throw new ClientError("Require Authorization Token", 403)
+        }
       
         if (tokenHeader.split(' ')[0] !== 'Bearer') {
           return res.status(500).send({

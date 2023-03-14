@@ -1,3 +1,4 @@
+require('dotenv').config();
 const multer = require('multer');
 var url = require('url');
 
@@ -44,5 +45,46 @@ const fullUrl = (req) => {
 
 const maxSize = 1000000;
 
-module.exports = { pagina, storage, filter, maxSize, fullUrl }
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.3',
+        info: {
+            title: 'Oil Mart REST API',
+            version: '1.0.0',
+            description:
+            'This is a Oil Mart Collection REST API for application cashier system made with Express and documented with Swagger',
+            license: {
+                name: 'MIT',
+                url: 'https://spdx.org/licenses/MIT.html',
+            },
+            contact: {
+                name: 'SAMA Bandung',
+                url: 'https://samabandung.com',
+                email: 'samabandungest2021@gmail.com',
+            },
+        },
+        components: {
+            securitySchemes: {
+                Authorization: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                    value: 'Bearer <JWT token here>'
+                },
+            },
+        },
+        servers: [
+            {
+            url: `http://${process.env.HOST}:${process.env.PORT}`,
+            description: 'Local Development'
+            },
+        ]
+    },
+    apis: ['./src/api/auth/*.js', 
+            './src/api/users/*.js',
+            './src/validator/auth/schema.js',
+            './src/validator/users/schema.js'],
+};
+
+module.exports = { pagina, storage, filter, maxSize, fullUrl, swaggerOptions }
     

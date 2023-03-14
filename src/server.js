@@ -1,18 +1,22 @@
 require('dotenv').config();
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const path = require('path');
-const app = express();
-
+const express = require('express'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    path = require('path'),
+    swaggerJsdoc = require("swagger-jsdoc"),
+    swaggerUi = require("swagger-ui-express"),
+    { swaggerOptions } = require('./utils/index'),
+    specs = swaggerJsdoc(swaggerOptions);
+    app = express();
+    
 app.use(express.json());
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/static', express.static(path.join(__dirname, '../public')));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // simple route
 app.use((req, res, next) => {
