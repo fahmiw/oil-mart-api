@@ -40,7 +40,7 @@ class ProductsHandler {
             
 
             res.status(200).send({
-                message: 'Inventory Created',
+                message: 'Product Created',
                 data: {
                     id: productId,
                     sku: sku,
@@ -131,7 +131,7 @@ class ProductsHandler {
                         throw new ClientError('Id product not found');
                     }
                 });
-                throw new ClientError('Id inventory not found');
+                throw new ClientError('Id Product not found');
             }
             if (req.file !== undefined) {
                 photo = req.file.filename;
@@ -194,7 +194,7 @@ class ProductsHandler {
             const { id } = req.params;
             const product = await this._service.searchProducts({id: id, filter: null, search:null, sort:null});
             if (product.length === 0) {
-                throw new ClientError('Id inventory not found');
+                throw new ClientError('Id product not found');
             }
             fs.unlink('./public/uploads/products/' + product[0].photo_product, (err) => {
                 if (err) {

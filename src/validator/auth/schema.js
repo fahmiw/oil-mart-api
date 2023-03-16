@@ -41,7 +41,7 @@ const Joi = require('joi');
  *    type: object
  *    properties:
  *     message:
- *      example: Sorry, have trouble in server
+ *      example: Sorry, have trouble in server / Please upload a file!
  */
 const PostAuthPayloadSchema = Joi.object({
   username: Joi.string().required(),

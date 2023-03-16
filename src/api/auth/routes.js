@@ -9,11 +9,15 @@ module.exports = app => {
 
     const authHandler = new AuthHandler(usersService, TokenManager, AuthValidator);
 
+    router.post('/', authHandler.postAuthHandler);
+
+    app.use('/v1/auth', router);
+    
     /**
      * @openapi
      * tags:
      *   name: Auth
-     *   description: The auth jwt token API
+     *   description: The auth jwt token endpoint
      * /v1/auth/:
      *   post:
      *     summary: Generate jwt token
@@ -51,7 +55,4 @@ module.exports = app => {
      *               $ref: '#/components/schemas/InternalServerResponse'
      *
      */
-    router.post('/', authHandler.postAuthHandler);
-
-    app.use('/v1/auth', router);
 }

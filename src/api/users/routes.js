@@ -13,9 +13,9 @@ module.exports = app => {
     const authHandler = new AuthHandler(usersService, TokenManager, AuthValidator);
     
     router.post('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.postUserHandler);
-    router.get('/', [authHandler.verifyTokenHandler], userHandlers.getUserHandler);
-    router.put('/:id', userHandlers.putUserHandler);
-    router.delete('/:id', userHandlers.deleteUserHandler);
+    router.get('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler, authHandler.isCashierHandler], userHandlers.getUserHandler);
+    router.put('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.putUserHandler);
+    router.delete('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.deleteUserHandler);
     router.get('/roles', userHandlers.getUserRoleHandler);
 
     app.use('/v1/users', router);
@@ -23,8 +23,8 @@ module.exports = app => {
     /**
      * @openapi
      * tags:
-     *   name: Users
-     *   description: The user management API
+     *  - name: Users
+     *    description: The user management endpoint
      * /v1/users/:
      *   post:
      *     security:
@@ -38,19 +38,19 @@ module.exports = app => {
      *           schema:
      *            $ref: '#/components/schemas/CreateUserInput'
      *     responses:
-     *       200:
-     *         description: Succes created user
+     *       201:
+     *         description: Success created user
      *         content:
      *           application/json:
      *            schema:
      *             $ref: '#/components/schemas/CreateUserResponse'
-     *       401:
+     *       403:
      *          description: Unauthorized
      *          content:
      *            application/json:
      *             schema:
      *               $ref: '#/components/schemas/UnauthorizedResponse'
-     *       400:
+     *       401:
      *          description: Bad request
      *          content:
      *            application/json:
@@ -75,6 +75,7 @@ module.exports = app => {
      *          default: {"id": null,"filter":null,"search":null,"sort":null,"limit": 10,"page": 1}
      *        allowReserved: true
      *        description: parameters request
+     *        required: true
      *     responses:
      *       200:
      *          description: Success get data
@@ -82,7 +83,121 @@ module.exports = app => {
      *            application/json:
      *             schema:
      *               $ref: '#/components/schemas/GetUserResponse'
-     *       401:
+     *       403:
+     *          description: Unauthorized
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/UnauthorizedResponse'
+     *       400:
+     *          description: Bad request
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ForbiddenResponse'
+     *       500:
+     *         description: Internal Server Error
+     *         content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/InternalServerResponse'
+     * /v1/users/{id}/:
+     *   put:
+     *     security:
+     *      - Authorization: []
+     *     summary: Edit User Data
+     *     tags: [Users]
+     *     parameters:
+     *      - in: path
+     *        name: id
+     *        schema:
+     *          type: string
+     *        required: true
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *            $ref: '#/components/schemas/CreateUserInput'
+     *     responses:
+     *       200:
+     *         description: Success edit user
+     *         content:
+     *           application/json:
+     *            schema:
+     *             $ref: '#/components/schemas/EditUserResponse'
+     *       403:
+     *          description: Unauthorized
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/UnauthorizedResponse'
+     *       400:
+     *          description: Bad request
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ForbiddenResponse'
+     *       500:
+     *         description: Internal Server Error
+     *         content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/InternalServerResponse'
+     *   delete:
+     *     security:
+     *      - Authorization: []
+     *     summary: Delete Users Data
+     *     tags: [Users]
+     *     parameters:
+     *      - in: path
+     *        name: id
+     *        schema:
+     *          type: string
+     *        required: true
+     *     responses:
+     *       201:
+     *         description: Success delete user
+     *         content:
+     *           application/json:
+     *            schema:
+     *             $ref: '#/components/schemas/RemoveUserResponse'
+     *       403:
+     *          description: Unauthorized
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/UnauthorizedResponse'
+     *       400:
+     *          description: Bad request
+     *          content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ForbiddenResponse'
+     *       500:
+     *         description: Internal Server Error
+     *         content:
+     *            application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/InternalServerResponse'
+     * /v1/users/roles/:
+     *   get:
+     *     summary: Get All Roles Data
+     *     tags: [Users]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *            $ref: '#/components/schemas/CreateUserInput'
+     *     responses:
+     *       200:
+     *         description: Success get Roles
+     *         content:
+     *           application/json:
+     *            schema:
+     *             $ref: '#/components/schemas/RoleListResponse'
+     *       403:
      *          description: Unauthorized
      *          content:
      *            application/json:

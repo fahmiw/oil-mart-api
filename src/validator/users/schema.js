@@ -62,7 +62,25 @@ const Joi = require('joi');
  *      example: 1
  *     items:
  *      type: array
- *      example: [{"id": "user-UfR7-KDKn1","name": "Admin","username": "adminoli","role": "ADMIN"},{"id": "user-Tlp4_xXeK9","name": "Fahmi Widianto","username": "fahmi11","role": "ADMIN"},{"id": "user-VaSrC5K9BT","name": "User Test","username": "usertest1","role": "KASIR"}]    
+ *      example: [{"id": "user-UfR7-KDKn1","name": "Admin","username": "adminoli","role": "ADMIN"},{"id": "user-Tlp4_xXeK9","name": "Fahmi Widianto","username": "fahmi11","role": "ADMIN"},{"id": "user-VaSrC5K9BT","name": "User Test","username": "usertest1","role": "KASIR"}]
+ *   EditUserResponse:
+ *    type: object
+ *    properties:
+ *      message: 
+ *       type: string
+ *       example: User (username) Updated
+ *   RemoveUserResponse:
+ *    type: object
+ *    properties:
+ *      message:  
+ *       type: string
+ *       example: User (username) Deleted
+ *   RoleListResponse:
+ *    type: object
+ *    properties:
+ *      data: 
+ *       type: array
+ *       example: [{"id": 1,"name": "ADMIN"},{"id": 2,"name": "KASIR"}]
  *          
  */
 const UserPayloadSchema = Joi.object({

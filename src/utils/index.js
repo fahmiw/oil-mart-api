@@ -81,9 +81,13 @@ const swaggerOptions = {
         ]
     },
     apis: ['./src/api/auth/*.js', 
-            './src/api/users/*.js',
+            './src/api/users/*.js', 
+            './src/api/inventory/*.js',
+            './src/api/products/*.js',
             './src/validator/auth/schema.js',
-            './src/validator/users/schema.js'],
+            './src/validator/users/schema.js',
+            './src/validator/inventory/schema.js',
+            './src/validator/products/schema.js'],
 };
 
 module.exports = { pagina, storage, filter, maxSize, fullUrl, swaggerOptions }
