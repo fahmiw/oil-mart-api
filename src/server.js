@@ -40,5 +40,9 @@ require('./api/products/routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+    if(process.env.NODE_ENV == 'production'){
+        console.log(`Server is running on ${PROD_HOST}.`);
+    } else {
+        console.log(`Server is running on ${process.env.HOST}:${PORT}.`);
+    }
 });

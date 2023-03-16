@@ -184,12 +184,6 @@ module.exports = app => {
      *   get:
      *     summary: Get All Roles Data
      *     tags: [Users]
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *            $ref: '#/components/schemas/CreateUserInput'
      *     responses:
      *       200:
      *         description: Success get Roles

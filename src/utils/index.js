@@ -78,6 +78,10 @@ const swaggerOptions = {
             url: `http://${process.env.HOST}:${process.env.PORT}`,
             description: 'Local Development'
             },
+            {
+            url: `https://${process.env.PROD_HOST}`,
+            description: 'PROD Development'
+            },
         ]
     },
     apis: ['./src/api/auth/*.js', 
