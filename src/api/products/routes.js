@@ -24,7 +24,7 @@ module.exports = app => {
     });
     
     router.post('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], upload.single('photo_product'), productsHandler.postProductHandler);
-    router.get('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler, authHandler.isCashierHandler], productsHandler.getProductHandler);
+    router.get('/', [authHandler.verifyTokenHandler], productsHandler.getProductHandler);
     router.put('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], upload.single('photo_product'), productsHandler.putProductHandler);
     router.delete('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], productsHandler.deleteProductHandler);
 
