@@ -23,7 +23,7 @@ module.exports = app => {
     });
     
     router.post('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], upload.single('photo'), inventoryHandler.postInventoryHandler);
-    router.get('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler, authHandler.isCashierHandler], inventoryHandler.getInventoryHandler);
+    router.get('/', [authHandler.verifyTokenHandler], inventoryHandler.getInventoryHandler);
     router.put('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], upload.single('photo'), inventoryHandler.putInventoryHandler);
     router.delete('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], inventoryHandler.deleteInventoryHandler);
 
