@@ -17,7 +17,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/static', express.static(path.join(__dirname, '../public')));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
-
 // simple route
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -30,6 +29,10 @@ app.use((req, res, next) => {
         return res.status(200).json({});
     }
     next();
+});
+
+app.get('/', function(req, res) {
+    res.redirect('/docs');
 });
 
 require('./api/inventory/routes')(app);
