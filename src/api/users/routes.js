@@ -13,7 +13,7 @@ module.exports = app => {
     const authHandler = new AuthHandler(usersService, TokenManager, AuthValidator);
     
     router.post('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.postUserHandler);
-    router.get('/', [authHandler.verifyTokenHandler, authHandler.isAdminHandler, authHandler.isCashierHandler], userHandlers.getUserHandler);
+    router.get('/', [authHandler.verifyTokenHandler], userHandlers.getUserHandler);
     router.put('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.putUserHandler);
     router.delete('/:id', [authHandler.verifyTokenHandler, authHandler.isAdminHandler], userHandlers.deleteUserHandler);
     router.get('/roles', userHandlers.getUserRoleHandler);
