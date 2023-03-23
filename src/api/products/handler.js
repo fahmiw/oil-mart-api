@@ -80,7 +80,7 @@ class ProductsHandler {
 
             for(let j=0; j<products.length; j++){
                 for(let i=0; i<products[j].id_inventory.length; i++) {
-                    var inventory = await this._inventoryService.readInventory({id: products[j].id_inventory[i], search: null})
+                    var inventory = await this._inventoryService.readInventory({id: products[j].id_inventory[i], search: null});
                     if(inventory[0].type === 'category') {
                         category.push(inventory[0].name);
                     } else if (inventory[0].type === 'brand') {
@@ -99,6 +99,8 @@ class ProductsHandler {
                     total_quantity: products[j].total_quantity,
                     is_available: products[j].is_available
                 }
+                category = [];
+                brand = [];
             }
             
             const dataResult = pagina(result, parseInt(objParams.page), parseInt(objParams.limit));
